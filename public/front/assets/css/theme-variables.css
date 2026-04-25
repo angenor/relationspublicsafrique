@@ -1,0 +1,76 @@
+/* ========================================
+   VARIABLES CSS POUR LE THÈME
+   Couleurs du thème : #713d0b, #a37c49, #bc9a6b
+======================================== */
+
+:root {
+    /* Couleurs principales du thème */
+    --theme-color: #713d0b;
+    --theme-color2: #a37c49;
+    --theme-color3: #bc9a6b;
+
+    /* Variables RGB pour utiliser avec rgba() */
+    --theme-color-rgb: 113, 61, 11;
+    --theme-color2-rgb: 163, 124, 73;
+    --theme-color3-rgb: 188, 154, 107;
+
+    /* Couleurs secondaires */
+    --vs-secondary-color: #2f2552;
+    --title-color: #000000;
+    --body-color: #444444;
+    --smoke-color: #f3f3f3;
+    --black-color: #000000;
+    --white-color: #ffffff;
+    --yellow-color: #fec624;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --border-color: #e8e8e8;
+}
+
+/* Classes utilitaires pour les couleurs du thème */
+.text-theme {
+    color: var(--theme-color) !important;
+}
+
+.bg-theme {
+    background-color: var(--theme-color) !important;
+}
+
+.border-theme {
+    border-color: var(--theme-color) !important;
+}
+
+/* Classes pour les boutons du thème */
+.btn-theme {
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
+}
+
+.btn-theme:hover {
+    background-color: var(--theme-color2);
+    border-color: var(--theme-color2);
+    color: white;
+}
+
+.btn-outline-theme {
+    color: var(--theme-color);
+    border-color: var(--theme-color);
+    background-color: transparent;
+}
+
+.btn-outline-theme:hover {
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+

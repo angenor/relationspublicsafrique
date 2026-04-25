@@ -1,0 +1,738 @@
+/* ========================================
+   PERSONNALISATION SECTION ÉVÉNEMENTS
+   Couleur theme: #713d0b
+======================================== */
+
+/* ========================================
+   IMAGES PAGES NOUS
+======================================== */
+
+/* Image à la une des pages Nous */
+.nous-featured-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(113, 61, 11, 0.2);
+    transition: all 0.3s ease;
+}
+
+.nous-featured-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(113, 61, 11, 0.3);
+}
+
+.nous-featured-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.nous-featured-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Overlay pour les images */
+.nous-featured-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(113, 61, 11, 0.1) 0%,
+        rgba(139, 90, 43, 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.nous-featured-image:hover::before {
+    opacity: 1;
+}
+
+/* Responsive pour les images */
+@media (max-width: 768px) {
+    .nous-featured-image img {
+        height: 200px;
+    }
+}
+
+/* Variables CSS pour les événements */
+:root {
+    --events-theme-color: #713d0b;
+    --events-theme-light: #8b5a2b;
+    --events-theme-dark: #5a2f08;
+    --events-theme-gradient: linear-gradient(135deg, #713d0b 0%, #8b5a2b 100%);
+}
+
+/* ========================================
+   BOUTONS ÉVÉNEMENTS
+======================================== */
+
+/* Les boutons gardent le style par défaut des boutons de blog */
+
+/* ========================================
+   BADGES ET ÉTIQUETTES
+======================================== */
+
+/* Badge "À la une" personnalisé */
+.badge.events-featured {
+    background: var(--events-theme-gradient);
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Badge inscriptions ouvertes */
+.badge.events-registration {
+    background: none;
+    color: var(--events-theme-color);
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0;
+}
+
+/* Badges d'état des inscriptions */
+.badge[style*="background: #dc3545"] {
+    background: #dc3545 !important;
+    color: white !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Badge prix */
+.events-price {
+    color: var(--events-theme-color);
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* ========================================
+   CARTES ÉVÉNEMENTS
+======================================== */
+
+/* Carte événement sans bordure */
+.vs-blog.events-card {
+    border: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.vs-blog.events-card:hover {
+    /* box-shadow: 0 10px 30px rgba(113, 61, 11, 0.15); */
+    transform: translateY(-5px);
+}
+
+/* Image événement avec overlay */
+.events-card .blog-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.events-card .blog-img::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        rgba(113, 61, 11, 0.1) 0%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.events-card:hover .blog-img::after {
+    opacity: 1;
+}
+
+/* ========================================
+   DATE ÉVÉNEMENT
+======================================== */
+
+/* Style personnalisé pour la date */
+.blog-date.events-date {
+    background: var(--events-theme-gradient);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(113, 61, 11, 0.3);
+}
+
+.blog-date.events-date .day {
+    font-size: 1.5em;
+    line-height: 1;
+    display: block;
+}
+
+.blog-date.events-date .month {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   TITRES ET TEXTES
+======================================== */
+
+/* Titre événement avec couleur theme */
+.events-title a {
+    color: var(--events-theme-color);
+    transition: color 0.3s ease;
+}
+
+.events-title a:hover {
+    color: var(--events-theme-light);
+    text-decoration: none;
+}
+
+/* Section titre avec accent */
+.events-section-title {
+    position: relative;
+    color: var(--events-theme-color);
+    margin-bottom: 2rem;
+}
+
+.events-section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--events-theme-gradient);
+    border-radius: 2px;
+}
+
+/* ========================================
+   MÉTADONNÉES ÉVÉNEMENTS
+======================================== */
+
+/* Icônes avec couleur theme */
+.events-meta a {
+    color: var(--events-theme-color);
+    transition: color 0.3s ease;
+}
+
+.events-meta a:hover {
+    color: var(--events-theme-light);
+}
+
+.events-meta i {
+    color: var(--events-theme-color);
+    margin-right: 5px;
+}
+
+/* ========================================
+   SIDEBAR ÉVÉNEMENTS
+======================================== */
+
+/* Widget sidebar avec accent theme */
+.widget.events-widget .widget_title {
+    color: var(--events-theme-color);
+    border-bottom: 2px solid var(--events-theme-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.widget.events-widget ul li a {
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.widget.events-widget ul li a:hover {
+    color: var(--events-theme-color);
+}
+
+/* ========================================
+   BREADCRUMB ÉVÉNEMENTS
+======================================== */
+
+/* Breadcrumb avec couleur theme */
+.breadcumb-wrapper.events-breadcrumb {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.breadcumb-wrapper.events-breadcrumb::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--events-theme-gradient);
+    opacity: 0.8;
+    z-index: 1;
+}
+
+.breadcumb-wrapper.events-breadcrumb::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    z-index: 2;
+}
+
+.breadcumb-wrapper.events-breadcrumb .breadcumb-content {
+    position: relative;
+    z-index: 3;
+}
+
+.breadcumb-wrapper.events-breadcrumb .breadcumb-title {
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.breadcumb-wrapper.events-breadcrumb .breadcumb-text {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.breadcumb-wrapper.events-breadcrumb .breadcumb-menu a {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.3s ease;
+}
+
+.breadcumb-wrapper.events-breadcrumb .breadcumb-menu a:hover {
+    color: white;
+}
+
+/* ========================================
+   PAGINATION
+======================================== */
+
+/* Styles personnalisés pour la pagination */
+.vs-pagination {
+    margin-top: 2rem;
+}
+
+.vs-pagination .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.vs-pagination .page-item .page-link {
+    color: var(--events-theme-color);
+    background-color: white;
+    border: 2px solid var(--events-theme-color);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+}
+
+.vs-pagination .page-item .page-link:hover {
+    background: var(--events-theme-gradient);
+    color: white;
+    border-color: var(--events-theme-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(113, 61, 11, 0.2);
+}
+
+.vs-pagination .page-item.active .page-link {
+    background: var(--events-theme-gradient);
+    color: white;
+    border-color: var(--events-theme-color);
+    box-shadow: 0 4px 12px rgba(113, 61, 11, 0.3);
+}
+
+.vs-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   CARTES AMÉLIORÉES
+======================================== */
+
+/* Amélioration des cartes d'événements */
+.events-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.events-card:hover {
+    box-shadow: 0 8px 24px rgba(113, 61, 11, 0.15);
+}
+
+.events-card .blog-img img {
+    transition: transform 0.5s ease;
+}
+
+.events-card:hover .blog-img img {
+    transform: scale(1.05);
+}
+
+/* Espacement cohérent entre les cartes */
+.events-card + .events-card {
+    margin-top: 2rem;
+}
+
+/* Badge prix amélioré */
+.events-price {
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+    .events-card {
+        margin-bottom: 2rem;
+    }
+
+    .events-section-title {
+        font-size: 1.8rem;
+    }
+
+    .vs-pagination .page-item .page-link {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+/* Animation d'apparition */
+@keyframes eventsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.events-card {
+    animation: eventsFadeIn 0.6s ease-out;
+}
+
+/* Délai d'animation pour les cartes multiples */
+.events-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+.events-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.events-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+.events-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+.events-card:nth-child(5) {
+    animation-delay: 0.5s;
+}
+.events-card:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+/* ========================================
+   MODAL D'INSCRIPTION
+======================================== */
+
+/* Modal d'inscription */
+.modal-content {
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-header {
+    background: var(--events-theme-gradient) !important;
+    color: white !important;
+    border-radius: 10px 10px 0 0 !important;
+    border-bottom: none !important;
+}
+
+.modal-header .modal-title {
+    color: white !important;
+}
+
+.modal-header .modal-title i {
+    color: white !important;
+}
+
+.modal-header * {
+    color: white !important;
+}
+
+.modal-body {
+    padding: 30px !important;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Boutons du modal */
+.btn[style*="background: var(--events-theme-gradient)"] {
+    transition: all 0.3s ease;
+}
+
+.btn[style*="background: var(--events-theme-gradient)"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(113, 61, 11, 0.3);
+}
+
+/* Formulaires */
+.form-control:focus {
+    border-color: var(--events-theme-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(113, 61, 11, 0.25) !important;
+}
+
+/* Cacher les erreurs de validation par défaut */
+#eventRegistrationForm .text-danger {
+    display: none !important;
+}
+
+/* Afficher les erreurs uniquement quand le formulaire a été touché */
+#eventRegistrationForm.form-touched .text-danger {
+    display: block !important;
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+    .modal-body {
+        padding: 20px !important;
+    }
+
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+}
+
+/* ========================================
+   EN-TÊTES DE CARTES AVEC THÈME
+======================================== */
+
+/* Styles pour les en-têtes de cartes avec thème */
+.card-header.bg-theme {
+    background-color: var(--events-theme-color) !important;
+}
+
+.card-header.bg-theme * {
+    color: white !important;
+}
+
+.card-header.bg-theme h1,
+.card-header.bg-theme h2,
+.card-header.bg-theme h3,
+.card-header.bg-theme h4,
+.card-header.bg-theme h5,
+.card-header.bg-theme h6,
+.card-header.bg-theme .card-title,
+.card-header.bg-theme i,
+.card-header.bg-theme span,
+.card-header.bg-theme p {
+    color: white !important;
+}
+
+/* ========================================
+   BADGES ET LABELS MODERNES
+======================================== */
+
+/* Badges modernes avec design amélioré */
+.badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Badge thème principal */
+.badge.bg-theme {
+    background: var(--events-theme-color) !important;
+    color: white !important;
+    border: none;
+}
+
+.badge.bg-theme:hover {
+    background: #5a2f08 !important;
+    transform: translateY(-1px);
+}
+
+/* Badge secondaire */
+.badge.bg-secondary {
+    background: #6c757d !important;
+    color: white !important;
+    border: none;
+}
+
+.badge.bg-info {
+    background: #17a2b8 !important;
+    color: white !important;
+    border: none;
+}
+
+.badge.bg-success {
+    background: #28a745 !important;
+    color: white !important;
+    border: none;
+}
+
+.badge.bg-warning {
+    background: #ffc107 !important;
+    color: #212529 !important;
+    border: none;
+}
+
+.badge.bg-danger {
+    background: #dc3545 !important;
+    color: white !important;
+    border: none;
+}
+
+/* Badge avec icône */
+.badge i {
+    margin-right: 6px;
+    font-size: 0.8em;
+}
+
+/* Labels modernes */
+.label {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 8px;
+    background: var(--events-theme-color);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.label:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Badge "Nouveau" simplifié */
+.badge.new-label {
+    background: #ff6b6b !important;
+    color: white !important;
+    animation: pulse 2s infinite;
+    position: relative;
+}
+
+/* Suppression de l'effet shine */
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Suppression de l'animation shine */
+
+/* Badge de statut avec indicateur */
+.badge.status-badge {
+    position: relative;
+    padding-left: 24px;
+}
+
+.badge.status-badge::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+}
+
+/* Badge de prix simplifié */
+.badge.price-badge {
+    background: #28a745 !important;
+    color: white !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+}
+
+.badge.price-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Responsive pour les badges */
+@media (max-width: 768px) {
+    .badge {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    .badge.price-badge {
+        font-size: 0.875rem;
+        padding: 8px 16px;
+    }
+}

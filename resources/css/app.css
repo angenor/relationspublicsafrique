@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-control{
+    @apply w-full rounded border-sky-800 border-2;
+}
+
+.mycontainer{
+    @apply lg:max-w-7xl w-full mx-auto ;
+}
+
+.fc{
+    @apply flex items-center justify-center ;
+}
+.btn{
+    @apply bg-sky-900 text-sky-100 px-4 py-1 rounded
+}
+.btn-success{
+    @apply text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-blue-800;
+}
+p{
+    @apply   text-sm ;
+}
+p::after{
+    content: '';
+    @apply pb-5  block;
+}
