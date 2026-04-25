@@ -31,6 +31,7 @@ public/storage000
 !/storage/logs/.gitkeep
 /storage/debugbar/*
 !/storage/debugbar/.gitkeep
+database/sauvegarde/*
 
 # ==========================================================
 # Bootstrap (cache Laravel)
@@ -120,3 +121,13 @@ CLAUDE.md
 # CGI (non utilisé en déploiement Laravel)
 # ==========================================================
 /cgi-bin
+
+# ==========================================================
+# Docker — Tests locaux uniquement (NE PAS pousser en prod)
+# ==========================================================
+/docker-compose.yml
+/docker-compose.*.yml
+/docker/
+/.dockerignore
+/.env.docker
+/.env.docker.*
