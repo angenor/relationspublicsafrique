@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Profil;
+use App\Observers\ProfilObserver;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -38,5 +40,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             \URL::forceScheme('https');
         }
+
+        Profil::observe(ProfilObserver::class);
     }
 }

@@ -92,9 +92,17 @@ Route::get('/nous/vision', [\App\Http\Controllers\NousController::class, 'vision
 Route::get('/nous/historique', [\App\Http\Controllers\NousController::class, 'historique'])->name('nous.historique');
 
 // Routes pour l'annuaire
-Route::get('/annuaire', [\App\Http\Controllers\AnnuaireController::class, 'consulter'])->name('annuaire.consulter');
+Route::get('/annuaire', [\App\Http\Controllers\AnnuaireController::class, 'index'])->name('annuaire.index');
 Route::get('/annuaire/rejoindre', [\App\Http\Controllers\AnnuaireController::class, 'rejoindre'])->name('annuaire.rejoindre');
 Route::get('/annuaire/suggerer', [\App\Http\Controllers\AnnuaireController::class, 'suggerer'])->name('annuaire.suggerer');
+Route::get('/annuaire/consulter', [\App\Http\Controllers\AnnuaireController::class, 'index'])->name('annuaire.consulter');
+// Gestion RGPD : lien signé envoyé à la personne référencée pour demander un retrait.
+Route::get('/annuaire/retrait/{token}', [\App\Http\Controllers\ProfilController::class, 'retraitForm'])
+    ->middleware('signed')
+    ->name('annuaire.retrait.form');
+Route::post('/annuaire/retrait/{token}/confirmer', [\App\Http\Controllers\ProfilController::class, 'retraitConfirmer'])
+    ->middleware('signed')
+    ->name('annuaire.retrait.confirmer');
 
 Route::get('/actualites/{slug}-{id}', [\App\Http\Controllers\PostController::class, 'shoqBlog'])
     ->where(['slug' => $slugPatern, 'id' => '[0-9]+'])
