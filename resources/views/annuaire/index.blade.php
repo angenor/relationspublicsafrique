@@ -18,18 +18,40 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .team-img {
-            width: 100%;
-            height: 200px;
+        /* Surcharge le thème (style.css §.team-style2 .team-img img)
+           qui fixe seulement width=140px sans height → ellipse.
+           On force un wrapper carré et une image en object-fit cover. */
+        .team-style2 .team-img {
+            width: 180px;
+            height: 180px;
+            max-width: 100%;
+            margin: 0 auto 20px;
             overflow: hidden;
-            border-radius: 10px;
+            border-radius: 50%;
+            aspect-ratio: 1 / 1;
+            position: relative;
         }
 
-        .team-img img {
+        .team-style2 .team-img a {
+            display: block;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .team-style2 .team-img img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+            display: block;
+        }
+
+        /* Le thème injecte une ligne décorative derrière la photo : on la masque
+           pour garder un cercle propre. */
+        .team-style2 .team-img:before {
+            display: none !important;
         }
 
         .team-name a {
