@@ -31,15 +31,15 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('cover')->nullable();
 
-            $table->longText('bio')->nullable();;
+            $table->longText('bio')->nullable();
 
             $table->string('image')->nullable()->default('images/user.png');
 
             $table->integer('online')->default(0);
             $table->integer('aprouve')->default(0);
 
-            $table->foreignIdFor(\App\Models\Pays::class) ;
-            $table->foreignIdFor(\App\Models\User::class) ;
+            $table->foreignIdFor(\App\Models\Pays::class)->nullable();
+            $table->foreignIdFor(\App\Models\User::class)->nullable();
 
             $table->timestamps();
         });

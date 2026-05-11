@@ -64,4 +64,30 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
 # relationspublicsafrique
+
+## Annuaire
+
+Rubrique annuaire des professionnels des relations publiques (feature `001-annuaire-evolution`).
+
+- **Public** : `/annuaire` — recherche libre, filtres (pays, type, domaines, tags), tri, fiche détail.
+- **API publique** : `GET /api/annuaire` (rate-limit 60 req/min/IP), `GET /api/annuaire/{slug}`.
+- **Back-office** : `/admin/profils` (Filament) — CRUD, modération, consentement RGPD, import/export CSV/XLSX, historique + restauration.
+
+Documentation complète : [`docs/annuaire.md`](docs/annuaire.md).
+Spec et plan : [`specs/001-annuaire-evolution/`](specs/001-annuaire-evolution/).
+
+### Tests annuaire
+
+```bash
+vendor/bin/phpunit --filter=Annuaire
+vendor/bin/phpunit --coverage-text --filter=Annuaire   # couverture cible >= 80 %
+```
+
+### Benchmarks (non exécutés par défaut)
+
+```bash
+vendor/bin/phpunit tests/Performance/AnnuaireBench.php          # SC-002 + SC-008
+vendor/bin/phpunit tests/Performance/AnnuaireImportBench.php    # SC-004 (import 500 profils)
+```

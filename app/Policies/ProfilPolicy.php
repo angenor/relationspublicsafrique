@@ -1,66 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Profil;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ProfilPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+    private function isAdmin(User $user): bool
+    {
+        return $user->type === 'admin';
+    }
+
+    private function isEditeur(User $user): bool
+    {
+        return in_array($user->type, ['admin', 'editeur'], true);
+    }
+
+    private function owns(User $user, Profil $profil): bool
+    {
+        return (int) $profil->user_id === (int) $user->id;
+    }
+
     public function viewAny(User $user): bool
     {
-        return true;
+        return $this->isEditeur($user);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Profil $profil): bool
     {
-        return true;
+        if ($this->isAdmin($user)) {
+            return true;
+        }
+
+        return $this->isEditeur($user) && $this->owns($user, $profil);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return true;
+        return $this->isEditeur($user);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Profil $profil): bool
     {
-        return true;
+        if ($this->isAdmin($user)) {
+            return true;
+        }
+
+        return $this->isEditeur($user) && $this->owns($user, $profil);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Profil $profil): bool
     {
-        return true;
+        return $this->isAdmin($user);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
     public function restore(User $user, Profil $profil): bool
     {
-        return true;
+        return $this->isAdmin($user);
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
     public function forceDelete(User $user, Profil $profil): bool
     {
-        return true;
+        return $this->isAdmin($user);
+    }
+
+    public function approve(User $user, Profil $profil): bool
+    {
+        // Un éditeur ne peut pas approuver son propre profil.
+        return $this->isAdmin($user);
+    }
+
+    public function reject(User $user, Profil $profil): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    public function archive(User $user, Profil $profil): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    public function import(User $user): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    public function export(User $user): bool
+    {
+        return $this->isAdmin($user);
+    }
+
+    public function viewAudit(User $user): bool
+    {
+        return $this->isAdmin($user);
     }
 }
