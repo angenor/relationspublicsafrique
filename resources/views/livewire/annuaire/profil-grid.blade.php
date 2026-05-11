@@ -96,9 +96,9 @@
             </p>
 
             @if ($mode === 'grille')
-                <div class="row g-3" role="list" aria-describedby="annuaire-resultats-count">
+                <div class="row" role="list" aria-describedby="annuaire-resultats-count">
                     @foreach ($profils as $profil)
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3" role="listitem">
+                        <div class="col-6 col-sm-6 col-lg-4 col-xxl-3" role="listitem">
                             @include('livewire.annuaire.profil-carte', ['profil' => $profil])
                         </div>
                     @endforeach
