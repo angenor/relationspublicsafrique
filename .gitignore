@@ -6,7 +6,7 @@
 /public/hot
 /public/storage
 public/storage000
-/public/build
+# /public/build est committé : hébergement mutualisé sans Node.js
 
 # ==========================================================
 # Storage Laravel (généré à l'exécution)

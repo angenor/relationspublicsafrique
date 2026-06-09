@@ -1,0 +1,57 @@
+{
+  "_index-e466ace2.js": {
+    "css": [
+      "assets/index-4522082c.css"
+    ],
+    "file": "assets/index-e466ace2.js"
+  },
+  "index.css": {
+    "file": "assets/index-4522082c.css",
+    "src": "index.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-cc2df222.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/css2/app.css": {
+    "file": "assets/app-e3b0c442.css",
+    "isEntry": true,
+    "src": "resources/css2/app.css"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-cb8110df.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "css": [
+      "assets/app-cb8110df.css"
+    ],
+    "file": "assets/app-325d14b3.js",
+    "imports": [
+      "_index-e466ace2.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js2/app.css": {
+    "file": "assets/app-21130571.css",
+    "src": "resources/js2/app.css"
+  },
+  "resources/js2/app.js": {
+    "css": [
+      "assets/app-21130571.css"
+    ],
+    "file": "assets/app-a81dee6e.js",
+    "imports": [
+      "_index-e466ace2.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js2/app.js"
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/sass/app.scss"
+  }
+}

@@ -48,35 +48,56 @@
                         <h2 class="team-name h2">{{ $profil->fullname }}</h2>
 
                         @if (! empty($profil->fonction))
-                            <p class="team-degi">{{ $profil->fonction }}</p>
+                            <p class="team-degi">
+                                <i class="fal fa-id-badge me-2" aria-hidden="true"></i>{{ $profil->fonction }}
+                            </p>
                         @elseif (! empty($profil->title))
-                            <p class="team-degi">{{ $profil->title }}</p>
+                            <p class="team-degi">
+                                <i class="fal fa-id-badge me-2" aria-hidden="true"></i>{{ $profil->title }}
+                            </p>
+                        @endif
+
+                        @if (! empty($profil->type_profil))
+                            <p class="team-experi">
+                                <i class="fal fa-user-tag me-2" aria-hidden="true"></i>{{ ucfirst($profil->type_profil) }}
+                            </p>
                         @endif
 
                         @if (! empty($profil->organisation))
-                            <p class="team-experi">{{ $profil->organisation }}</p>
+                            <p class="team-experi">
+                                <i class="fal fa-building me-2" aria-hidden="true"></i>{{ $profil->organisation }}
+                            </p>
                         @endif
 
                         @if (! empty($profil->ville) || ! empty(optional($profil->pays)->name))
                             <p class="team-experi">
+                                <i class="fas fa-map-marker-alt me-2" aria-hidden="true"></i>
                                 {{ $profil->ville }}@if (! empty($profil->ville) && ! empty(optional($profil->pays)->name)), @endif{{ optional($profil->pays)->name }}
                             </p>
                         @endif
 
+                        @if (! empty($profil->nationalite))
+                            <p class="team-experi">
+                                <i class="fal fa-flag me-2" aria-hidden="true"></i>{{ $profil->nationalite }}
+                            </p>
+                        @endif
+
                         @if (! empty($profil->adresse))
-                            <p class="team-experi">{{ $profil->adresse }}</p>
+                            <p class="team-experi">
+                                <i class="fal fa-location-arrow me-2" aria-hidden="true"></i>{{ $profil->adresse }}
+                            </p>
                         @endif
 
                         @if ($emailVisible)
                             <p class="team-experi">
-                                <i class="fal fa-envelope me-2"></i>
+                                <i class="fas fa-at me-2" aria-hidden="true"></i>
                                 <a href="mailto:{{ $profil->email }}">{{ $profil->email }}</a>
                             </p>
                         @endif
 
                         @if ($telVisible)
                             <p class="team-experi">
-                                <i class="fal fa-phone me-2"></i>
+                                <i class="fal fa-phone me-2" aria-hidden="true"></i>
                                 <a href="tel:{{ $profil->tel }}">{{ $profil->tel }}</a>
                             </p>
                         @endif
