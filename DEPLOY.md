@@ -3,12 +3,13 @@
 ## En local — avant chaque déploiement
 
 ```bash
-# 1. Builder les assets front
+# 1. Builder les assets front (génère/met à jour public/build/)
 npm run build
 
-# 2. Committer et pousser (build inclus)
-git add public/build
-git commit -m "build: assets pour déploiement"
+# 2. Vérifier ce qui va être committé
+git status
+git add .
+git commit -m "feat: "
 git push origin main
 ```
 
