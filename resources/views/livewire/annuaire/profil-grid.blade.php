@@ -51,6 +51,21 @@
             </div>
 
             <div class="col-6 col-md-3 col-lg-2">
+                <label for="annuaire-tag" class="form-label small mb-1">Tags</label>
+                <select id="annuaire-tag"
+                        wire:model.live="tags"
+                        class="form-select"
+                        multiple
+                        size="1"
+                        aria-label="Tags (sélection multiple)"
+                        aria-multiselectable="true">
+                    @foreach ($tagOptions as $t)
+                        <option value="{{ $t->slug }}">{{ $t->libelle }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
                 <label for="annuaire-tri" class="form-label small mb-1">Trier par</label>
                 <select id="annuaire-tri" wire:model.live="tri" class="form-select">
                     <option value="">Par défaut</option>
