@@ -11,6 +11,8 @@ export default defineConfig({
                 "resources/css2/app.css",
                 "resources/js/app.js",
                 "resources/js2/app.js",
+                "resources/css/media.css",
+                "resources/js/media.js",
             ],
             refresh: true,
         }),

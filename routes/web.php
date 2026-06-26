@@ -108,6 +108,32 @@ Route::get('/actualites/{slug}-{id}', [\App\Http\Controllers\PostController::cla
     ->where(['slug' => $slugPatern, 'id' => '[0-9]+'])
     ->name('blog.show');
 
+// ============ Section Média (002-media-newsroom) ============
+// L'ordre importe : media.show ({slug}-{id}) est déclarée en DERNIER pour éviter
+// toute collision avec /media/explorer et /media/series/{slug}.
+Route::get('/media', [\App\Http\Controllers\MediaController::class, 'home'])->name('media.home');
+Route::get('/media/explorer', [\App\Http\Controllers\MediaController::class, 'index'])->name('media.index');
+Route::get('/media/series/{slug}', [\App\Http\Controllers\MediaController::class, 'serie'])
+    ->where(['slug' => $slugPatern])
+    ->name('media.serie');
+Route::post('/media/{id}/commentaires', [\App\Http\Controllers\MediaController::class, 'storeComment'])
+    ->where(['id' => '[0-9]+'])
+    ->middleware('throttle:media-public')
+    ->name('media.comments.store');
+Route::post('/media/newsletter', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])
+    ->middleware('throttle:media-public')
+    ->name('media.newsletter.subscribe');
+Route::get('/media/newsletter/confirmer/{token}', [\App\Http\Controllers\NewsletterController::class, 'confirm'])
+    ->middleware('signed')
+    ->name('media.newsletter.confirm');
+Route::get('/media/newsletter/desabonnement/{token}', [\App\Http\Controllers\NewsletterController::class, 'unsubscribe'])
+    ->middleware('signed')
+    ->name('media.newsletter.unsubscribe');
+Route::get('/media/{slug}-{id}', [\App\Http\Controllers\MediaController::class, 'show'])
+    ->where(['slug' => $slugPatern, 'id' => '[0-9]+'])
+    ->name('media.show');
+// ============================================================
+
 Route::get('/explorer', [\App\Http\Controllers\PostController::class, 'explorer'])->name('explorer');
 Route::get('/contact', [\App\Http\Controllers\PostController::class, 'contact'])->name('contact');
 Route::get('/recherche', [\App\Http\Controllers\PostController::class, 'recherche'])->name('recherche');

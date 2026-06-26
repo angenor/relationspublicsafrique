@@ -138,6 +138,7 @@
                     </li>
 
                     <li><a href="{{route('appartenir')}}" wire:navigate>Appartenir</a></li>
+                    <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                     <li><a href="/formations" wire:navigate>Formation</a></li>
                     <li><a href="{{route('contact')}}" wire:navigate> Contact</a></li>
 
@@ -232,6 +233,7 @@
                                         </ul>
                                     </li>
 
+                                    <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                                     <li><a href="/formations" wire:navigate>Formation</a></li>
                                     <li><a href="{{route('contact')}}" wire:navigate> Contact</a></li>
 {{--                                    <li class=""> <a href="{{route('apprendre')}}">Apprendre</a> </li>--}}

@@ -14,6 +14,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('annuaire:envoyer-rappels-consentement')->daily();
+
+        // Section Média (002-media-newsroom)
+        $schedule->command('media:publish-scheduled')->everyMinute();
+        $schedule->command('media:recompute-popularity')->hourly();
     }
 
     /**
