@@ -7,12 +7,114 @@
  */
 
 :root {
-    --events-accent: #c0392b;
-    --events-accent-dark: #97291c;
+    /* Accent aligné sur le thème événements du site (events-custom.css) pour une
+       section cohérente avec le hero brun et la page /annuaire/consulter. */
+    --events-accent: #713d0b;
+    --events-accent-dark: #5a3008;
     --events-ink: #1f2933;
     --events-muted: #6b7280;
     --events-border: #e5e7eb;
     --events-bg-soft: #f8f9fa;
+}
+
+/* ============================ Hero (bandeau) ========================= */
+.events-breadcrumb .events-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+.events-breadcrumb .breadcumb-text {
+    max-width: 60ch;
+}
+
+.events-hero__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1rem;
+    margin: 1.8rem 0 0.4rem;
+}
+
+.events-hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 96px;
+    padding: 0.6rem 1.1rem;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    backdrop-filter: blur(4px);
+}
+
+.events-hero__num {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+
+.events-hero__lbl {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 0.3rem;
+}
+
+.events-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.5rem;
+    margin: 1.6rem 0 1.4rem;
+}
+
+.events-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--events-accent);
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.7rem 1.6rem;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.events-hero__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+    color: var(--events-accent-dark);
+}
+
+.events-hero__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 2px;
+    transition: opacity 0.15s ease;
+}
+
+.events-hero__link:hover {
+    color: #fff;
+    opacity: 0.85;
 }
 
 /* ============================ Page listing ============================ */

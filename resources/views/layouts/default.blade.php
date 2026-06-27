@@ -111,7 +111,13 @@
             <div class="vs-mobile-menu">
                 <ul>
 
-                <li class=""> <a href="{{route('events.index')}}" wire:navigate>COM’TOUR</a> </li>
+                <li class="menu-item-has-children">
+                    <a href="{{route('events.index')}}" wire:navigate>Événements</a>
+                    <ul class="sub-menu">
+                        <li><a href="{{route('events.index')}}" wire:navigate>Tous les événements</a></li>
+                        <li><a href="{{route('events.index')}}" wire:navigate>Lomé COM’ TOUR</a></li>
+                    </ul>
+                </li>
 
                      <li class="menu-item-has-children">
                         <a href="#" wire:navigate>Nous</a>
@@ -204,10 +210,13 @@
                         <div class="col text-end text-xl-center">
                             <nav class="main-menu menu-style1 d-none d-lg-block">
                                 <ul>
-                                    <li class="">
-                                        <a href="{{ route('events.index') }}" wire:navigate>  COM’ TOUR</a>
+                                    <li class="menu-item-has-children">
+                                        <a href="{{ route('events.index') }}" wire:navigate>Événements</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="{{ route('events.index') }}" wire:navigate>Tous les événements</a></li>
+                                            <li><a href="{{ route('events.index') }}" wire:navigate>Lomé COM’ TOUR</a></li>
+                                        </ul>
                                     </li>
-
 
                                     <li class="menu-item-has-children">
                                         <a href="#" wire:navigate>Nous</a>
