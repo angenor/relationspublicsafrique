@@ -61,6 +61,10 @@ Route::get('/evenements/{slug}-{id}', [\App\Http\Controllers\EventController::cl
 Route::get('/evenements/categorie/{slug}', [\App\Http\Controllers\EventController::class, 'category'])->name('events.category');
 Route::get('/evenements/calendrier', [\App\Http\Controllers\EventController::class, 'calendar'])->name('events.calendar');
 Route::get('/evenements/recherche', [\App\Http\Controllers\EventController::class, 'search'])->name('events.search');
+// Inscription interne (C1) : le contrôleur existait mais aucune route ne le reliait.
+Route::post('/evenements/{event}/inscription', [\App\Http\Controllers\EventRegistrationController::class, 'register'])
+    ->where('event', '[0-9]+')
+    ->name('events.register');
 
 // Routes pour les formations
 Route::get('/formations', [\App\Http\Controllers\FormationController::class, 'index'])->name('formations');
@@ -161,7 +165,7 @@ Route::get('stream', function () {
 })->name('stream');
 
 Route::get('stream/{filename}', function ($filename) {
-    $path = storage_path('app/' . $filename);
+    $path = storage_path('app/'.$filename);
 
     if (! Storage::exists($path)) {
         abort(404);

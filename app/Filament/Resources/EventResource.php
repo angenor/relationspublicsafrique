@@ -3,12 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
-use App\Models\Event;
 use App\Models\Category;
-use App\Models\User;
+use App\Models\Event;
 use App\Models\Pays;
-use Closure;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -39,8 +37,9 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
-                    Forms\Components\Grid::make()->schema([
+                Forms\Components\Section::make('Identité & card')
+                    ->columns(2)
+                    ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Titre de l\'événement')
                             ->minLength(2)
@@ -48,50 +47,107 @@ class EventResource extends Resource
                             ->required()
                             ->live(500)
                             ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                                if (($get('slug') ?? '') !== Str::slug($old)) {
+                                if (($get('slug') ?? '') !== Str::slug((string) $old)) {
                                     return;
                                 }
-                                $set('slug', Str::slug($state));
+                                $set('slug', Str::slug((string) $state));
                             }),
-
                         Forms\Components\TextInput::make('slug')
                             ->label('Slug')
                             ->required(),
-                    ])->columns(2),
+                        Forms\Components\Textarea::make('resume')
+                            ->label('Résumé (card)')
+                            ->rows(3)
+                            ->maxLength(500)
+                            ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('image')
+                            ->label('Visuel de l\'événement')
+                            ->image()
+                            ->imageEditor()
+                            ->directory('events')
+                            ->columnSpanFull(),
+                    ]),
 
-                    Forms\Components\Textarea::make('resume')
-                        ->label('Résumé')
-                        ->rows(3)
-                        ->maxLength(500),
+                Forms\Components\Section::make('Contenu détaillé')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\RichEditor::make('description')
+                            ->label('Présentation complète')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('objectifs')
+                            ->label('Objectifs')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                        Forms\Components\RichEditor::make('programme')
+                            ->label('Programme / agenda')
+                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('public_cible')
+                            ->label('Public cible')
+                            ->rows(3)
+                            ->columnSpanFull(),
+                    ]),
 
-                    Forms\Components\RichEditor::make('description')
-                        ->label('Description complète')
-                        ->required()
-                        ->columnSpanFull(),
-
-                    Forms\Components\Grid::make(3)->schema([
+                Forms\Components\Section::make('Dates')
+                    ->columns(3)
+                    ->schema([
                         Forms\Components\DateTimePicker::make('start_date')
                             ->label('Date de début')
                             ->required()
                             ->native(),
-
                         Forms\Components\DateTimePicker::make('end_date')
                             ->label('Date de fin')
                             ->required()
                             ->native()
                             ->after('start_date'),
-
                         Forms\Components\DateTimePicker::make('registration_deadline')
                             ->label('Date limite d\'inscription')
                             ->native()
                             ->before('start_date'),
+                        Forms\Components\Placeholder::make('temporal_status_display')
+                            ->label('Statut temporel (calculé)')
+                            ->content(fn (?Event $record): string => $record?->temporal_status_label ?? '— (selon les dates)')
+                            ->columnSpanFull(),
                     ]),
 
-                    Forms\Components\Grid::make(2)->schema([
+                Forms\Components\Section::make('Format & lieu')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Toggle::make('online')
+                            ->label('En ligne (format)')
+                            ->helperText('Active si l\'événement se déroule en ligne ; sinon, indiquez le lieu.')
+                            ->default(false)
+                            ->live(),
                         Forms\Components\TextInput::make('location')
-                            ->label('Lieu')
-                            ->maxLength(255),
+                            ->label('Lieu / Ville')
+                            ->maxLength(255)
+                            ->visible(fn (Get $get): bool => ! $get('online')),
+                    ]),
 
+                Forms\Components\Section::make('Inscription')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('registration_mode')
+                            ->label('Mode d\'inscription')
+                            ->options(Event::$registrationModes)
+                            ->default('internal')
+                            ->required()
+                            ->live(),
+                        Forms\Components\TextInput::make('registration_url')
+                            ->label('Lien d\'inscription externe')
+                            ->url()
+                            ->maxLength(255)
+                            ->visible(fn (Get $get): bool => $get('registration_mode') === 'external')
+                            ->required(fn (Get $get): bool => $get('registration_mode') === 'external'),
+                        Forms\Components\TextInput::make('max_participants')
+                            ->label('Nombre maximum de participants')
+                            ->numeric()
+                            ->minValue(1),
+                        Forms\Components\TextInput::make('current_participants')
+                            ->label('Participants actuels')
+                            ->numeric()
+                            ->default(0)
+                            ->disabled(),
                         Forms\Components\TextInput::make('price')
                             ->label('Prix')
                             ->numeric()
@@ -99,61 +155,42 @@ class EventResource extends Resource
                             ->default(0),
                     ]),
 
-                    Forms\Components\Grid::make(2)->schema([
-                        Forms\Components\TextInput::make('max_participants')
-                            ->label('Nombre maximum de participants')
-                            ->numeric()
-                            ->minValue(1),
-
-                        Forms\Components\TextInput::make('current_participants')
-                            ->label('Participants actuels')
-                            ->numeric()
-                            ->default(0)
-                            ->disabled(),
+                Forms\Components\Section::make('Publication & classement')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('status')
+                            ->label('Statut éditorial')
+                            ->options(Event::$statuses)
+                            ->required()
+                            ->default('draft'),
+                        Forms\Components\Toggle::make('is_featured')
+                            ->label('Mis en avant'),
+                        Forms\Components\Select::make('category_id')
+                            ->label('Type d\'événement')
+                            ->options(Category::where('type', 'event')->where('online', 1)->orderBy('position')->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload(),
+                        Forms\Components\Select::make('pays_id')
+                            ->label('Pays')
+                            ->options(Pays::where('online', 1)->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload(),
+                        Forms\Components\Select::make('user_id')
+                            ->label('Organisateur')
+                            ->options(User::pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required(),
                     ]),
-                ])->columnSpan(8),
 
-                Forms\Components\Card::make()->schema([
-                    Forms\Components\FileUpload::make('image')
-                        ->label('Image de l\'événement')
-                        ->image()
-                        ->imageEditor()
-                        ->directory('events'),
-
-                    Forms\Components\Select::make('status')
-                        ->label('Statut')
-                        ->options(Event::$statuses)
-                        ->required()
-                        ->default('draft'),
-
-                    Forms\Components\Toggle::make('online')
-                        ->label('En ligne')
-                        ->default(false),
-
-                    Forms\Components\Toggle::make('is_featured')
-                        ->label('Mis en avant')
-                        ->default(false),
-
-                    Forms\Components\Select::make('category_id')
-                        ->label('Catégorie')
-                        ->options(Category::pluck('name', 'id'))
-                        ->searchable()
-                        ->preload(),
-
-                    Forms\Components\Select::make('pays_id')
-                        ->label('Pays')
-                        ->options(Pays::where('online', 1)->pluck('name', 'id'))
-                        ->searchable()
-                        ->preload(),
-
-                    Forms\Components\Select::make('user_id')
-                        ->label('Organisateur')
-                        ->options(User::pluck('name', 'id'))
-                        ->searchable()
-                        ->preload()
-                        ->required(),
-                ])->columnSpan(4),
-            ])->columns(12);
+                Forms\Components\Section::make('Compte rendu (post-événement)')
+                    ->collapsed()
+                    ->schema([
+                        Forms\Components\RichEditor::make('compte_rendu')
+                            ->label('Compte rendu')
+                            ->columnSpanFull(),
+                    ]),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -161,10 +198,10 @@ class EventResource extends Resource
         return $table
             ->deferLoading()
             ->striped()
-            ->emptyStateHeading("Aucun événement enregistré")
+            ->emptyStateHeading('Aucun événement enregistré')
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
+                    ->label('Visuel')
                     ->size(60)
                     ->circular(),
 
@@ -175,9 +212,19 @@ class EventResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('start_date')
-                    ->label('Date de début')
+                    ->label('Début')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('temporal_status_label')
+                    ->label('Statut temporel')
+                    ->badge()
+                    ->getStateUsing(fn (Event $record): string => $record->temporal_status_label)
+                    ->color(fn (Event $record): string => match ($record->temporal_status) {
+                        'ongoing' => 'success',
+                        'upcoming' => 'info',
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('location')
                     ->label('Lieu')
@@ -189,12 +236,9 @@ class EventResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('price')
-                    ->label('Prix')
-                    ->money('EUR')
-                    ->sortable(),
-
                 Tables\Columns\BadgeColumn::make('status')
+                    ->label('Éditorial')
+                    ->formatStateUsing(fn (?string $state): string => Event::$statuses[$state] ?? (string) $state)
                     ->colors([
                         'danger' => 'cancelled',
                         'warning' => 'draft',
@@ -202,25 +246,35 @@ class EventResource extends Resource
                         'gray' => 'completed',
                     ]),
 
+                Tables\Columns\TextColumn::make('registration_mode')
+                    ->label('Inscription')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state): string => Event::$registrationModes[$state] ?? (string) $state)
+                    ->toggleable(),
+
                 Tables\Columns\IconColumn::make('online')
                     ->label('En ligne')
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_featured')
-                    ->label('Mis en avant')
+                    ->label('À la une')
                     ->boolean()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('current_participants')
                     ->label('Participants')
-                    ->suffix(fn(Event $record): string => $record->max_participants ? " / {$record->max_participants}" : '')
+                    ->suffix(fn (Event $record): string => $record->max_participants ? " / {$record->max_participants}" : '')
                     ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')
                     ->options(Event::$statuses)
-                    ->label('Statut'),
+                    ->label('Statut éditorial'),
+
+                SelectFilter::make('category_id')
+                    ->label('Type')
+                    ->options(Category::where('type', 'event')->orderBy('position')->pluck('name', 'id')),
 
                 SelectFilter::make('pays_id')
                     ->label('Pays')
@@ -228,52 +282,57 @@ class EventResource extends Resource
                     ->searchable(),
 
                 Filter::make('En ligne')
-                    ->query(fn(Builder $query) => $query->where('online', true)),
+                    ->query(fn (Builder $query) => $query->where('online', true)),
 
                 Filter::make('Mis en avant')
-                    ->query(fn(Builder $query) => $query->where('is_featured', true)),
+                    ->query(fn (Builder $query) => $query->where('is_featured', true)),
 
                 Filter::make('À venir')
-                    ->query(fn(Builder $query) => $query->where('start_date', '>', now())),
+                    ->query(fn (Builder $query) => $query->where('start_date', '>', now())),
 
                 Filter::make('En cours')
-                    ->query(fn(Builder $query) => $query->where('start_date', '<=', now())->where('end_date', '>=', now())),
+                    ->query(fn (Builder $query) => $query->where('start_date', '<=', now())->where('end_date', '>=', now())),
+
+                Filter::make('Clos')
+                    ->query(fn (Builder $query) => $query->where('end_date', '<', now())),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\Action::make('activate')
-                        ->label('Activer')
-                        ->action(fn(Event $record) => $record->activate())
+                    Tables\Actions\Action::make('publish')
+                        ->label('Publier')
+                        ->action(fn (Event $record) => $record->publish())
                         ->requiresConfirmation()
                         ->color('success')
-                        ->icon('heroicon-o-check')
-                        ->visible(fn(Event $record) => !$record->online),
-                    Tables\Actions\Action::make('deactivate')
-                        ->label('Désactiver')
-                        ->action(fn(Event $record) => $record->deactivate())
+                        ->icon('heroicon-o-check-circle')
+                        ->visible(fn (Event $record) => $record->status !== 'published'),
+                    Tables\Actions\Action::make('unpublish')
+                        ->label('Dépublier')
+                        ->action(fn (Event $record) => $record->unpublish())
                         ->requiresConfirmation()
-                        ->color('danger')
-                        ->icon('heroicon-o-x-mark')
-                        ->visible(fn(Event $record) => $record->online),
+                        ->color('gray')
+                        ->icon('heroicon-o-eye-slash')
+                        ->visible(fn (Event $record) => $record->status === 'published'),
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\BulkAction::make('activate')
-                    ->label('Activer la sélection')
-                    ->action(fn($records) => $records->each->activate())
-                    ->requiresConfirmation()
-                    ->color('success')
-                    ->icon('heroicon-o-check'),
-                Tables\Actions\BulkAction::make('deactivate')
-                    ->label('Désactiver la sélection')
-                    ->action(fn($records) => $records->each->deactivate())
-                    ->requiresConfirmation()
-                    ->color('danger')
-                    ->icon('heroicon-o-x-mark'),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('publish')
+                        ->label('Publier la sélection')
+                        ->action(fn ($records) => $records->each->publish())
+                        ->requiresConfirmation()
+                        ->color('success')
+                        ->icon('heroicon-o-check-circle'),
+                    Tables\Actions\BulkAction::make('unpublish')
+                        ->label('Dépublier la sélection')
+                        ->action(fn ($records) => $records->each->unpublish())
+                        ->requiresConfirmation()
+                        ->color('gray')
+                        ->icon('heroicon-o-eye-slash'),
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ])
             ->defaultSort('start_date', 'desc');
     }
@@ -281,7 +340,9 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            \App\Filament\Resources\EventResource\RelationManagers\RegistrationsRelationManager::class,
+            EventResource\RelationManagers\RegistrationsRelationManager::class,
+            EventResource\RelationManagers\SpeakersRelationManager::class,
+            EventResource\RelationManagers\MediasRelationManager::class,
         ];
     }
 

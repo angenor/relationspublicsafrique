@@ -15,6 +15,8 @@ export default defineConfig({
                 "resources/js/media.js",
                 "resources/css/projets.css",
                 "resources/js/projets.js",
+                "resources/css/events.css",
+                "resources/js/events.js",
             ],
             refresh: true,
         }),

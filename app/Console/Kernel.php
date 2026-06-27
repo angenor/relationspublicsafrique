@@ -18,6 +18,9 @@ class Kernel extends ConsoleKernel
         // Section Média (002-media-newsroom)
         $schedule->command('media:publish-scheduled')->everyMinute();
         $schedule->command('media:recompute-popularity')->hourly();
+
+        // Section Événements (004-evenements) — hygiène éditoriale optionnelle (R8).
+        $schedule->command('events:mark-completed')->daily();
     }
 
     /**

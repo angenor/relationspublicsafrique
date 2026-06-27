@@ -14,6 +14,11 @@
     "isEntry": true,
     "src": "resources/css/app.css"
   },
+  "resources/css/events.css": {
+    "file": "assets/events-4b639c79.css",
+    "isEntry": true,
+    "src": "resources/css/events.css"
+  },
   "resources/css/media.css": {
     "file": "assets/media-7c71d06b.css",
     "isEntry": true,
@@ -43,6 +48,11 @@
     ],
     "isEntry": true,
     "src": "resources/js/app.js"
+  },
+  "resources/js/events.js": {
+    "file": "assets/events-8463c379.js",
+    "isEntry": true,
+    "src": "resources/js/events.js"
   },
   "resources/js/media.js": {
     "file": "assets/media-2e10607a.js",

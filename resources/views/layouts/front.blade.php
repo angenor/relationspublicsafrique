@@ -112,6 +112,7 @@
                 <ul>
 
                 <li class=""> <a href="{{route('events.index')}}" wire:navigate>Lomé COM’ TOUR</a> </li>
+                <li class=""> <a href="{{ route('events.index') }}" wire:navigate>Événements</a> </li>
 
                      <li class="menu-item-has-children">
                         <a href="#" wire:navigate>Nous</a>
@@ -206,6 +207,9 @@
                                 <ul>
                                     <li class="">
                                         <a href="{{ route('events.index') }}" wire:navigate>Lomé COM’ TOUR</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="{{ route('events.index') }}" wire:navigate>Événements</a>
                                     </li>
 
 

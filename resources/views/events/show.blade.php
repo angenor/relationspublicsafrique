@@ -1,274 +1,175 @@
-@extends('layouts.default')
+@extends('layouts.front')
 
-@section('content')
+@section('title', $event->title)
 
-    <!--==============================
-    Breadcumb
-============================== -->
-    <div class="breadcumb-wrapper events-breadcrumb" data-bg-src="{{asset('front/assets/img/breadcumb/breadcumb-bg.png')}}">
-        <div class="container z-index-common">
-            <div class="breadcumb-content">
-                <h1 class="breadcumb-title">{{ $event->title }}</h1>
-                <p class="breadcumb-text">{{ $event->resume ?: Str::limit($event->description, 100) }}</p>
-                <div class="breadcumb-menu-wrap">
-                    <ul class="breadcumb-menu">
-                        <li><a href="{{url('/')}}">Accueil</a></li>
-                        <li><a href="{{ route('events.index') }}">Événements</a></li>
-                        @if($event->category)
-                            <li><a href="{{ route('events.index', ['category' => $event->category->id]) }}">{{ $event->category->name }}</a></li>
-                        @endif
-                        <li>{{ Str::limit($event->title, 30) }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--==============================
-    Event Details Area
-==============================-->
-    <section class="vs-blog-wrapper space-top space-extra-bottom">
-        <div class="container">
-            <div class="row gx-40">
-                <div class="col-lg-8">
-                    <!-- Event Image -->
-                    <div class="vs-blog blog-single mb-5 events-card">
-                        <div class="blog-img">
-                            @if($event->image)
-                                <img src="{{ $event->img }}" alt="{{ $event->title }}" class="w-100">
-                            @else
-                                <img src="{{ asset('front/assets/img/blog/blog-1-1.jpg') }}" alt="{{ $event->title }}" class="w-100">
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Event Content -->
-                    <div class="vs-blog blog-single">
-                        <div class="blog-content">
-                            <!-- Event Meta -->
-                            <div class="blog-meta mb-4 events-meta">
-                                <a href="#"><i class="fal fa-user"></i>{{ $event->user?->name ?? 'Anonyme' }}</a>
-                                <a href="#"><i class="fal fa-calendar"></i>{{ $event->start_date->format('d/m/Y H:i') }}</a>
-                                @if($event->location)
-                                    <a href="#"><i class="fal fa-map-marker-alt"></i>{{ $event->location }}</a>
-                                @endif
-                                @if($event->category)
-                                    <a href="{{ route('events.index', ['category' => $event->category->id]) }}">
-                                        <i class="fal fa-tag"></i>{{ $event->category->name }}
-                                    </a>
-                                @endif
-                            </div>
-
-                            <!-- Event Title -->
-                            <h1 class="blog-title h2 mb-4 events-title">{{ $event->title }}</h1>
-
-                            <!-- Event Description -->
-                            <div class="prose mb-5">
-                                {!! $event->description !!}
-                            </div>
-
-                            <!-- Event Details -->
-                            <div class="row mb-5">
-                                <div class="col-md-6">
-                                    <div class="card border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title events-title mb-3">
-                                                <i class="fal fa-calendar-alt me-2"></i>Dates
-                                            </h5>
-                                            <div class="mb-2">
-                                                <strong>Début :</strong> {{ $event->start_date->format('d/m/Y H:i') }}
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong>Fin :</strong> {{ $event->end_date->format('d/m/Y H:i') }}
-                                            </div>
-                                            @if($event->registration_deadline)
-                                                <div class="events-price">
-                                                    <strong>Inscriptions jusqu'au :</strong> {{ $event->registration_deadline->format('d/m/Y H:i') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title events-title mb-3">
-                                                <i class="fal fa-info-circle me-2"></i>Informations
-                                            </h5>
-                                            @if($event->location)
-                                                <div class="mb-2">
-                                                    <strong>Lieu :</strong> {{ $event->location }}
-                                                </div>
-                                            @endif
-                                            <div class="mb-2">
-                                                <strong>Prix :</strong>
-                                                @if($event->price > 0)
-                                                    <span class="events-price">{{ number_format($event->price, 2) }} €</span>
-                                                @else
-                                                    <span class="events-price">Gratuit</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <!-- Event Status -->
-                            <div class="card border-0 shadow-sm mb-5">
-                                <div class="card-body">
-                                    <h5 class="card-title events-title mb-3">Statut de l'événement</h5>
-                                    @if($event->is_upcoming)
-                                        <div class="alert mb-0" style="background-color: rgba(113, 61, 11, 0.1); border-left: 4px solid var(--events-theme-color); color: var(--events-theme-color);">
-                                            <i class="fal fa-clock me-2"></i>
-                                            Cet événement aura lieu le {{ $event->start_date->format('d/m/Y') }}
-                                        </div>
-                                    @elseif($event->is_ongoing)
-                                        <div class="alert mb-0" style="background-color: rgba(113, 61, 11, 0.1); border-left: 4px solid var(--events-theme-color); color: var(--events-theme-color);">
-                                            <i class="fal fa-play-circle me-2"></i>
-                                            Cet événement est en cours
-                                        </div>
-                                    @else
-                                        <div class="alert mb-0" style="background-color: rgba(113, 61, 11, 0.1); border-left: 4px solid var(--events-theme-color); color: var(--events-theme-color);">
-                                            <i class="fal fa-calendar-check me-2"></i>
-                                            Cet événement s'est terminé le {{ $event->end_date->format('d/m/Y') }}
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Event Registration -->
-                            <div class="card border-0 shadow-sm mb-5">
-                                <div class="card-body">
-                                    <h5 class="card-title events-title mb-3">
-                                        <i class="fal fa-user-plus me-2"></i>Inscription
-                                    </h5>
-                                    @livewire('event-registration-modal', ['event' => $event])
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <div class="col-lg-4">
-                    <aside class="sidebar-area">
-                        <!-- Event Quick Info -->
-                        <div class="widget events-widget">
-                            <h3 class="widget_title">Informations rapides</h3>
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fal fa-calendar me-3" style="color: var(--events-theme-color);"></i>
-                                        <div>
-                                            <small class="text-muted">Date</small>
-                                            <div class="fw-bold">{{ $event->start_date->format('d/m/Y') }}</div>
-                                        </div>
-                                    </div>
-                                    @if($event->location)
-                                        <div class="d-flex align-items-center mb-3">
-                                            <i class="fal fa-map-marker-alt me-3" style="color: var(--events-theme-color);"></i>
-                                            <div>
-                                                <small class="text-muted">Lieu</small>
-                                                <div class="fw-bold">{{ $event->location }}</div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fal fa-euro-sign me-3" style="color: var(--events-theme-color);"></i>
-                                        <div>
-                                            <small class="text-muted">Prix</small>
-                                            <div class="fw-bold">
-                                                @if($event->price > 0)
-                                                    {{ number_format($event->price, 2) }} €
-                                                @else
-                                                    Gratuit
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Organizer Info -->
-                        @if($event->user)
-                            <div class="widget events-widget">
-                                <h3 class="widget_title">Organisateur</h3>
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body text-center">
-                                        <div class="mb-3">
-                                            <img src="{{ $event->user->profile_photo_url ?? asset('front/assets/img/team/team-s-1-1.png') }}"
-                                                 alt="{{ $event->user->name }}"
-                                                 class="rounded-circle"
-                                                 style="width: 80px; height: 80px; object-fit: cover;">
-                                        </div>
-                                        <h5 class="mb-1">{{ $event->user->name }}</h5>
-                                        <p class="text-muted mb-0">Organisateur de l'événement</p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        <!-- Similar Events -->
-                        @if($similarEvents->count() > 0)
-                            <div class="widget events-widget">
-                                <h3 class="widget_title">Événements similaires</h3>
-                                <div class="recent-post-wrap">
-                                    @foreach($similarEvents->take(3) as $similarEvent)
-                                        <div class="recent-post">
-                                            <div class="media-img">
-                                                <a href="{{ route('events.show', ['id' => $similarEvent->id, 'slug' => $similarEvent->slug]) }}">
-                                                    @if($similarEvent->image)
-                                                        <img src="{{ $similarEvent->img }}" alt="{{ $similarEvent->title }}">
-                                                    @else
-                                                        <img src="{{ asset('front/assets/img/blog/recent-post-1-1.jpg') }}" alt="{{ $similarEvent->title }}">
-                                                    @endif
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="post-title">
-                                                    <a class="text-inherit" href="{{ route('events.show', ['id' => $similarEvent->id, 'slug' => $similarEvent->slug]) }}">
-                                                        {{ Str::limit($similarEvent->title, 50) }}
-                                                    </a>
-                                                </h4>
-                                                <div class="recent-post-meta">
-                                                    <a href="#">{{ $similarEvent->start_date->format('d/m/Y') }}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-
-                        <!-- Share Event -->
-                        <div class="widget events-widget">
-                            <h3 class="widget_title">Partager</h3>
-                            <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-sm" style="background: var(--events-theme-color); color: white; border: none;">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm" style="background: var(--events-theme-light); color: white; border: none;">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm" style="background: var(--events-theme-color); color: white; border: none;">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm" style="background: var(--events-theme-dark); color: white; border: none;">
-                                    <i class="fal fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </div>
-    </section>
-
+@section('meta')
+    <meta name="description" content="{{ \Illuminate\Support\Str::limit(strip_tags($event->resume_text), 160) }}">
+    <link rel="canonical" href="{{ $event->link }}">
 @endsection
 
-@section('title')
-    {{ $event->title }} - Relations Publiques Afrique
+@section('css')
+    @vite(['resources/css/events.css', 'resources/js/events.js'])
+@endsection
+
+@section('content')
+    @php
+        $cancelled = $event->status === 'cancelled';
+        $statusKey = $cancelled ? 'cancelled' : $event->temporal_status;
+        $statusLabel = $cancelled ? 'Annulé' : $event->temporal_status_label;
+        $cta = $event->cta;
+        $alreadyRegistered = auth()->check() && $event->isUserRegistered(auth()->id());
+    @endphp
+
+    <article class="event-detail">
+        {{-- En-tête : visuel + identité --}}
+        <header class="event-detail__hero">
+            <div class="event-detail__hero-media">
+                <img src="{{ $event->img }}" alt="{{ $event->title }}" loading="eager">
+                <span class="event-card__badge event-card__badge--{{ $statusKey }}">{{ $statusLabel }}</span>
+            </div>
+            <div class="container">
+                <div class="event-detail__hero-body">
+                    <nav class="event-detail__crumbs" aria-label="Fil d'Ariane">
+                        <a href="{{ route('events.index') }}" wire:navigate>Événements</a>
+                        <span aria-hidden="true">/</span>
+                        <span>{{ $event->title }}</span>
+                    </nav>
+                    <h1 class="event-detail__title">{{ $event->title }}</h1>
+                    <div class="event-detail__meta">
+                        <span><i class="fal fa-calendar"></i>{{ $event->start_date->translatedFormat('d F Y') }}</span>
+                        <span><i class="fal fa-clock"></i>{{ $event->start_date->format('H\hi') }}</span>
+                        @if ($event->format_label)
+                            <span><i class="fal fa-map-marker-alt"></i>{{ $event->format_label }}</span>
+                        @endif
+                        @if ($event->category)
+                            <span><i class="fal fa-tag"></i>{{ $event->category->name }}</span>
+                        @endif
+                    </div>
+                    @if (! $cancelled && $event->temporal_status === 'upcoming')
+                        <div class="event-countdown"
+                             data-countdown
+                             data-start="{{ $event->start_date->toIso8601String() }}"
+                             aria-label="Compte à rebours avant l'événement"></div>
+                    @endif
+                    @if ($event->resume)
+                        <p class="event-detail__resume">{{ $event->resume }}</p>
+                    @endif
+                </div>
+            </div>
+        </header>
+
+        <div class="container event-detail__container">
+            <div class="event-detail__content">
+                @if ($event->description)
+                    <section class="event-detail__section" aria-labelledby="sec-description">
+                        <h2 id="sec-description">Présentation</h2>
+                        <div class="event-detail__prose">{!! $event->description !!}</div>
+                    </section>
+                @endif
+
+                @if ($event->objectifs)
+                    <section class="event-detail__section" aria-labelledby="sec-objectifs">
+                        <h2 id="sec-objectifs">Objectifs</h2>
+                        <div class="event-detail__prose">{!! nl2br(e($event->objectifs)) !!}</div>
+                    </section>
+                @endif
+
+                @if ($event->programme)
+                    <section class="event-detail__section" aria-labelledby="sec-programme">
+                        <h2 id="sec-programme">Programme</h2>
+                        <div class="event-detail__prose">{!! $event->programme !!}</div>
+                    </section>
+                @endif
+
+                {{-- Intervenants — section masquée si aucune ligne (FR-010) --}}
+                @if ($event->speakers->isNotEmpty())
+                    @include('events.partials.speakers', ['event' => $event])
+                @endif
+
+                @if ($event->public_cible)
+                    <section class="event-detail__section" aria-labelledby="sec-public">
+                        <h2 id="sec-public">Public cible</h2>
+                        <div class="event-detail__prose">{!! nl2br(e($event->public_cible)) !!}</div>
+                    </section>
+                @endif
+
+                {{-- Médias post-événement — uniquement si présents (événement clos) --}}
+                @if ($event->medias->isNotEmpty())
+                    @include('events.partials.galerie', ['event' => $event])
+                @endif
+
+                @if ($event->compte_rendu)
+                    <section class="event-detail__section" aria-labelledby="sec-compte-rendu">
+                        <h2 id="sec-compte-rendu">Compte rendu</h2>
+                        <div class="event-detail__prose">{!! $event->compte_rendu !!}</div>
+                    </section>
+                @endif
+
+                {{-- Événements similaires --}}
+                @if ($similarEvents->isNotEmpty())
+                    <section class="event-similar" aria-labelledby="sec-similar">
+                        <h2 id="sec-similar">Événements similaires</h2>
+                        <div class="row g-4">
+                            @foreach ($similarEvents as $similar)
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    @include('components.event-card', ['event' => $similar])
+                                </div>
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+            </div>
+
+            {{-- Colonne inscription / informations pratiques + CTA dynamique --}}
+            <aside class="event-detail__aside" id="inscription">
+                <h2>Informations pratiques</h2>
+                <ul class="event-detail__infos">
+                    <li><i class="fal fa-calendar"></i><span>{{ $event->start_date->translatedFormat('d F Y · H\hi') }}</span></li>
+                    <li><i class="fal fa-flag-checkered"></i><span>Fin : {{ $event->end_date->translatedFormat('d F Y · H\hi') }}</span></li>
+                    <li><i class="fal fa-map-marker-alt"></i><span>{{ $event->format_label ?: 'Lieu à préciser' }}</span></li>
+                    @if ($event->pays)
+                        <li><i class="fal fa-globe-africa"></i><span>{{ $event->pays->name }}</span></li>
+                    @endif
+                    @if ($event->max_participants)
+                        <li><i class="fal fa-users"></i><span>{{ $event->current_participants }} / {{ $event->max_participants }} inscrits</span></li>
+                    @endif
+                    @if ($event->registration_deadline)
+                        <li><i class="fal fa-hourglass-half"></i><span>Clôture des inscriptions : {{ $event->registration_deadline->translatedFormat('d/m/Y') }}</span></li>
+                    @endif
+                    <li><i class="fal fa-ticket-alt"></i><span>{{ $event->price > 0 ? number_format((float) $event->price, 2, ',', ' ').' €' : 'Gratuit' }}</span></li>
+                </ul>
+
+                @if ($cancelled)
+                    <p class="event-cta-note"><i class="fal fa-ban"></i> Cet événement a été annulé.</p>
+                @elseif ($cta === 'register_external')
+                    <a class="event-cta-btn" href="{{ $event->registration_url }}" target="_blank" rel="noopener">
+                        S'inscrire <i class="fal fa-external-link"></i>
+                    </a>
+                @elseif ($cta === 'register_internal')
+                    @if ($alreadyRegistered)
+                        <p class="event-cta-note"><i class="fal fa-check-circle"></i> Vous êtes déjà inscrit à cet événement.</p>
+                    @elseif (auth()->check())
+                        <button type="button" class="event-cta-btn" data-event-register data-url="{{ route('events.register', $event) }}">
+                            S'inscrire
+                        </button>
+                        <div class="event-cta-feedback" data-event-register-feedback role="status" aria-live="polite"></div>
+                    @else
+                        <a class="event-cta-btn" href="{{ route('login') }}">Se connecter pour s'inscrire</a>
+                    @endif
+                @elseif ($cta === 'view_replay')
+                    <a class="event-cta-btn" href="#medias">Voir replay / photos / documents</a>
+                @else
+                    @if ($event->temporal_status === 'past')
+                        <p class="event-cta-note">Cet événement est terminé.</p>
+                    @elseif ($event->registration_mode === 'internal' && $event->registration_deadline && $event->registration_deadline->isPast())
+                        <p class="event-cta-note">Les inscriptions sont closes.</p>
+                    @elseif ($event->max_participants && $event->current_participants >= $event->max_participants)
+                        <p class="event-cta-note">Cet événement est complet.</p>
+                    @else
+                        <p class="event-cta-note">Inscriptions non disponibles pour le moment.</p>
+                    @endif
+                @endif
+            </aside>
+        </div>
+    </article>
 @endsection

@@ -7,102 +7,58 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Vitrine publique des événements (feature 004-evenements).
+ *
+ * Gate de visibilité : `published()` UNIQUEMENT (research R1). L'ancien
+ * `->online()` est retiré de toutes les routes publiques — il masquait à tort
+ * les événements présentiels publiés (`online` = format, pas visibilité).
+ */
 class EventController extends Controller
 {
     /**
-     * Affiche la liste des événements
+     * Listing /evenements — le filtrage réactif (statut temporel, type, pays,
+     * tri, recherche, charger-plus) est porté par <livewire:events.grille-events />.
      */
     public function index(Request $request): View
     {
-        $query = Event::query()
-            ->with(['category', 'user', 'pays'])
-            ->online()
+        $featuredEvents = Event::query()
+            ->with(['category', 'pays'])
+            ->featured()
             ->published()
-            ->orderBy('start_date', 'asc');
+            ->orderBy('start_date', 'asc')
+            ->take((int) config('events.a_la_une', 3))
+            ->get();
 
-        // Filtrage par catégorie
-        if ($request->has('category') && $request->category) {
-            $query->byCategory($request->category);
-        }
+        $upcomingCount = Event::published()->upcoming()->count();
+        $ongoingCount = Event::published()->ongoing()->count();
+        $pastCount = Event::published()->past()->count();
 
-        // Filtrage par statut temporel
-        if ($request->has('status')) {
-            switch ($request->status) {
-                case 'upcoming':
-                    $query->upcoming();
-                    break;
-                case 'ongoing':
-                    $query->where('start_date', '<=', now())
-                        ->where('end_date', '>=', now());
-                    break;
-                case 'past':
-                    $query->where('end_date', '<', now());
-                    break;
-            }
-        }
-
-        $featuredEvents = Event::featured()->online()->published()->take(3)->get();
-
-        // Créer une nouvelle requête pour les événements normaux (non mis en avant)
-        $normalEventsQuery = Event::query()
-            ->with(['category', 'user', 'pays'])
-            ->online()
-            ->published()
-            ->where('is_featured', false)
-            ->orderBy('start_date', 'asc');
-
-        // Appliquer les mêmes filtres que la requête principale
-        if ($request->has('category') && $request->category) {
-            $normalEventsQuery->byCategory($request->category);
-        }
-
-        if ($request->has('status')) {
-            switch ($request->status) {
-                case 'upcoming':
-                    $normalEventsQuery->upcoming();
-                    break;
-                case 'ongoing':
-                    $normalEventsQuery->where('start_date', '<=', now())
-                        ->where('end_date', '>=', now());
-                    break;
-                case 'past':
-                    $normalEventsQuery->where('end_date', '<', now());
-                    break;
-            }
-        }
-
-        $events = $normalEventsQuery->paginate(6);
-        $categories = Category::all();
-
-        // Compter les événements par statut pour la sidebar
-        $upcomingCount = Event::online()->published()->upcoming()->count();
-        $ongoingCount = Event::online()->published()->ongoing()->count();
-        $pastCount = Event::online()->published()->past()->count();
-
-        return view('events.index', compact('events', 'categories', 'featuredEvents', 'upcomingCount', 'ongoingCount', 'pastCount'));
+        return view('events.index', compact('featuredEvents', 'upcomingCount', 'ongoingCount', 'pastCount'));
     }
 
     /**
-     * Affiche un événement spécifique
+     * Détail /evenements/{slug}-{id}. Résolution restreinte aux événements
+     * publiés (FR-012) : un brouillon, un statut non publié ou un slug/id
+     * inconnu donne 404.
      */
     public function show(string $slug, int $id): View
     {
-        $event = Event::with(['category', 'user', 'pays'])
+        $event = Event::query()
+            ->with(['category', 'pays', 'user', 'speakers', 'medias'])
             ->where('id', $id)
             ->where('slug', $slug)
-            ->online()
             ->published()
             ->firstOrFail();
 
-        // Incrémenter le nombre de vues
         $event->increment('view');
 
-        // Événements similaires
-        $similarEvents = Event::with(['category', 'user'])
+        $similarEvents = Event::query()
+            ->with(['category', 'pays', 'medias'])
             ->where('id', '!=', $event->id)
             ->where('category_id', $event->category_id)
-            ->online()
             ->published()
+            ->orderBy('start_date', 'desc')
             ->take(3)
             ->get();
 
@@ -110,29 +66,29 @@ class EventController extends Controller
     }
 
     /**
-     * Affiche les événements par catégorie
+     * Affiche les événements publiés d'une catégorie (type d'événement).
      */
     public function category(string $slug): View
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $events = Event::with(['category', 'user', 'pays'])
+        $events = Event::query()
+            ->with(['category', 'pays', 'medias'])
             ->where('category_id', $category->id)
-            ->online()
             ->published()
             ->orderBy('start_date', 'asc')
-            ->paginate(6);
+            ->paginate((int) config('events.per_page', 12));
 
         return view('events.category', compact('events', 'category'));
     }
 
     /**
-     * Affiche le calendrier des événements
+     * Calendrier des événements publiés.
      */
     public function calendar(): View
     {
-        $events = Event::with(['category', 'user', 'pays'])
-            ->online()
+        $events = Event::query()
+            ->with(['category', 'pays'])
             ->published()
             ->orderBy('start_date', 'asc')
             ->get();
@@ -141,22 +97,24 @@ class EventController extends Controller
     }
 
     /**
-     * Recherche d'événements
+     * Recherche d'événements publiés.
      */
     public function search(Request $request): View
     {
-        $query = $request->get('q');
+        $query = (string) $request->get('q', '');
 
-        $events = Event::with(['category', 'user', 'pays'])
-            ->where(function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%")
-                    ->orWhere('location', 'like', "%{$query}%");
+        $events = Event::query()
+            ->with(['category', 'pays', 'medias'])
+            ->when($query !== '', function ($builder) use ($query) {
+                $builder->where(function ($q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%")
+                        ->orWhere('location', 'like', "%{$query}%");
+                });
             })
-            ->online()
             ->published()
             ->orderBy('start_date', 'asc')
-            ->paginate(6);
+            ->paginate((int) config('events.per_page', 12));
 
         return view('events.search', compact('events', 'query'));
     }
