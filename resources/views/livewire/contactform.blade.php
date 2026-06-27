@@ -4,6 +4,11 @@
             <div class="vs-circle"></div>
             <h3 class="form-title"> Nous contacter </h3>
 
+            <input type="hidden" wire:model="projet">
+            @if ($projet)
+                <p class="text-muted small mb-3">Au sujet du projet : <strong>{{ $projet }}</strong></p>
+            @endif
+
             <div class="form-group">
                 <input wire:model="name" type="text" name="name" id="name" placeholder="Nom et Prénom">
                 <div class="text-danger" >@error('name') {{ $message }} @enderror</div>

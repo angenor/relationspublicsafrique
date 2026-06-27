@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Media;
 use App\Models\Profil;
+use App\Models\Projet;
 use App\Observers\MediaObserver;
 use App\Observers\ProfilObserver;
+use App\Observers\ProjetObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
 
         Profil::observe(ProfilObserver::class);
         Media::observe(MediaObserver::class);
+        Projet::observe(ProjetObserver::class);
 
         // Throttling des formulaires publics média (commentaire, newsletter).
         RateLimiter::for('media-public', fn (Request $request) => Limit::perMinute(

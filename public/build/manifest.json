@@ -19,6 +19,11 @@
     "isEntry": true,
     "src": "resources/css/media.css"
   },
+  "resources/css/projets.css": {
+    "file": "assets/projets-030adabf.css",
+    "isEntry": true,
+    "src": "resources/css/projets.css"
+  },
   "resources/css2/app.css": {
     "file": "assets/app-e3b0c442.css",
     "isEntry": true,
@@ -43,6 +48,11 @@
     "file": "assets/media-2e10607a.js",
     "isEntry": true,
     "src": "resources/js/media.js"
+  },
+  "resources/js/projets.js": {
+    "file": "assets/projets-a4b95a09.js",
+    "isEntry": true,
+    "src": "resources/js/projets.js"
   },
   "resources/js2/app.css": {
     "file": "assets/app-21130571.css",

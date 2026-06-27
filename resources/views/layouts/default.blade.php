@@ -119,6 +119,7 @@
                             <li><a href="{{route('nous.mission')}}" wire:navigate>Mission</a></li>
                             <li><a href="{{route('nous.vision')}}" wire:navigate>Vision</a></li>
                             <li><a href="{{route('nous.historique')}}" wire:navigate>Historique</a></li>
+                            <li><a href="{{ route('projets.index') }}" wire:navigate>Nos projets</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children">
@@ -126,6 +127,7 @@
                         <ul class="sub-menu">
                             <li><a href="{{route('blog')}}" wire:navigate>Articles</a></li>
                             <li><a href="#" wire:navigate>Comptes rendus</a></li>
+                            <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                         </ul>
                     </li>
                      <li class="menu-item-has-children">
@@ -138,7 +140,6 @@
                     </li>
 
                     <li><a href="{{route('appartenir')}}" wire:navigate>Appartenir</a></li>
-                    <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                     <li><a href="/formations" wire:navigate>Formation</a></li>
                     <li><a href="{{route('contact')}}" wire:navigate> Contact</a></li>
 
@@ -214,6 +215,7 @@
                                             <li><a href="{{route('nous.mission')}}" wire:navigate>Mission</a></li>
                                             <li><a href="{{route('nous.vision')}}" wire:navigate>Vision</a></li>
                                             <li><a href="{{route('nous.historique')}}" wire:navigate>Historique</a></li>
+                                            <li><a href="{{ route('projets.index') }}" wire:navigate>Nos projets</a></li>
                                         </ul>
                                     </li>
                                     <li class="menu-item-has-children">
@@ -221,6 +223,7 @@
                                         <ul class="sub-menu">
                                             <li><a href="{{route('blog')}}" wire:navigate>Articles</a></li>
                                             <li><a href="#" wire:navigate>Comptes rendus</a></li>
+                                            <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                                         </ul>
                                     </li>
 
@@ -233,7 +236,6 @@
                                         </ul>
                                     </li>
 
-                                    <li><a href="{{ route('media.home') }}" wire:navigate>Média</a></li>
                                     <li><a href="/formations" wire:navigate>Formation</a></li>
                                     <li><a href="{{route('contact')}}" wire:navigate> Contact</a></li>
 {{--                                    <li class=""> <a href="{{route('apprendre')}}">Apprendre</a> </li>--}}

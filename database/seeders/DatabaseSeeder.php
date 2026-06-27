@@ -19,11 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-
         $faker = \Faker\Factory::create('fr_FR');
-
-
-
 
         \App\Models\User::factory()->create([
             'name' => 'labomle',
@@ -31,9 +27,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'type' => 'admin',
             'created_at' => now(),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
-
 
         \App\Models\User::factory()->create([
             'name' => 'damssan',
@@ -41,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'type' => 'admin',
             'created_at' => now(),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
 
         \App\Models\User::factory()->create([
@@ -50,15 +45,15 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'type' => 'admin',
             'created_at' => now(),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
 
-
+        // Section Projets (vitrine) — feature 003-projets-vitrine (idempotent).
+        $this->call([
+            ProjetSeeder::class,
+        ]);
 
         /**
-         *
-         *
-         *
         Artisan::call('migrate:fresh');
 
       foreach (WidgetText::$types as $index => $item) {

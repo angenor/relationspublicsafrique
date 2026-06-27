@@ -31,6 +31,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -43,6 +44,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read \App\Models\Profil|null $profil
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
@@ -53,13 +55,15 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
  * @property-read int|null $posts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOnline($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereType($value)
+ *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail,  FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, Billable;
+    use Billable, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -113,19 +117,16 @@ class User extends Authenticatable implements MustVerifyEmail,  FilamentUser
     {
         return $this->hasMany(Post::class);
     }
+
     public function courses(): HasMany
     {
         return $this->hasMany(Course::class);
     }
 
-
     public function achatcourses(): HasMany
     {
         return $this->hasMany(AchatCours::class);
     }
-
-
-
 
     public function activate(): void
     {
@@ -133,12 +134,14 @@ class User extends Authenticatable implements MustVerifyEmail,  FilamentUser
         $this->save();
     }
 
-
-
     public function canAccessPanel(Panel $panel): bool
     {
-        $user = \Auth::user();
-        return $user->type = 'admin';
+        // Accès au back-office réservé au personnel (admin + éditeur annuaire).
+        // NB : correctif d'un bug pré-existant — l'ancien `= 'admin'` (affectation)
+        // renvoyait toujours true → tout utilisateur connecté accédait au panneau.
+        // Le périmètre par ressource est ensuite affiné par les policies (ex. Projet
+        // et Partenaire sont réservés aux administrateurs — FR-024).
+        return in_array($this->type, ['admin', 'editeur'], true);
     }
 
     public function hasAbonnementForFormation($formationId)
@@ -146,6 +149,7 @@ class User extends Authenticatable implements MustVerifyEmail,  FilamentUser
         $exists = AchatCours::where('user_id', $this->id)
             ->where('course_id', $formationId)
             ->exists();
+
         return $exists;
     }
 }

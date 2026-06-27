@@ -134,6 +134,16 @@ Route::get('/media/{slug}-{id}', [\App\Http\Controllers\MediaController::class, 
     ->name('media.show');
 // ============================================================
 
+// ============ Section Projets (003-projets-vitrine) ============
+// Listing en cards filtrables + page détaillée. Routes additives : aucune
+// route existante n'est modifiée. La résolution {projet:slug} est restreinte
+// aux projets publiés (cf. Projet::resolveRouteBinding) → brouillon/inconnu = 404.
+Route::get('/projets', [\App\Http\Controllers\ProjetController::class, 'index'])->name('projets.index');
+Route::get('/projets/{slug}', [\App\Http\Controllers\ProjetController::class, 'show'])
+    ->where(['slug' => $slugPatern])
+    ->name('projets.show');
+// ==============================================================
+
 Route::get('/explorer', [\App\Http\Controllers\PostController::class, 'explorer'])->name('explorer');
 Route::get('/contact', [\App\Http\Controllers\PostController::class, 'contact'])->name('contact');
 Route::get('/recherche', [\App\Http\Controllers\PostController::class, 'recherche'])->name('recherche');

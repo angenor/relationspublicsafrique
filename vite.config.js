@@ -13,6 +13,8 @@ export default defineConfig({
                 "resources/js2/app.js",
                 "resources/css/media.css",
                 "resources/js/media.js",
+                "resources/css/projets.css",
+                "resources/js/projets.js",
             ],
             refresh: true,
         }),
